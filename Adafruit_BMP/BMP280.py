@@ -6,7 +6,7 @@
 #
 # Datasheet: https://www.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
 
-
+from __future__ import division
 import logging
 
 # BMP280 default address.
@@ -119,7 +119,7 @@ class BMP280(object):
         """Gets the compensated temperature in degrees celsius."""
         raw_temp = self.read_raw(BMP280_TEMPDATA)
         compensated_temp = self._compensate_temp(raw_temp)
-        temp = float(((compensated_temp * 5 + 128) >> 8)) / 100
+        temp = float(((compensated_temp * 5 + 128) >> 8)) // 100
 
         self._logger.debug('Calibrated temperature {0}'.format(temp))
         return temp
@@ -129,7 +129,7 @@ class BMP280(object):
         raw_temp = self.read_raw(BMP280_TEMPDATA)
         compensated_temp = self._compensate_temp(raw_temp)
         raw_pressure = self.read_raw(BMP280_PRESSUREDATA)
-
+        
         p1 = compensated_temp - 128000
         p2 = p1 * p1 * self.cal_p6
         p2 += (p1 * self.cal_p5) << 17
@@ -141,18 +141,18 @@ class BMP280(object):
             return 0
 
         p = 1048576 - raw_pressure
-        p = (((p << 31) - p2) * 3125) / p1
+        p = (((p << 31) - p2) * 3125) // p1
         p1 = (self.cal_p9 * (p >> 13) * (p >> 13)) >> 25
         p2 = (self.cal_p8 * p) >> 19
         p = ((p + p1 + p2) >> 8) + ((self.cal_p7) << 4)
 
-        return float(p / 256)
+        return float(p // 256)
 
     def read_altitude(self, sealevel_pa=101325.0):
         """Calculates the altitude in meters."""
         # Calculation taken straight from section 3.6 of the datasheet.
         pressure = float(self.read_pressure())
-        altitude = 44330.0 * (1.0 - pow(pressure / sealevel_pa, (1.0 / 5.255)))
+        altitude = 44330.0 * (1.0 - pow(pressure // sealevel_pa, (1.0 // 5.255)))
         self._logger.debug('Altitude {0} m'.format(altitude))
         return altitude
 
