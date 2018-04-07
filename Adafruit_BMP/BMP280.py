@@ -160,6 +160,6 @@ class BMP280(object):
         """Calculates the pressure at sealevel when given a known altitude in
         meters. Returns a value in Pascals."""
         pressure = float(self.read_pressure())
-        p0 = pressure / pow(1.0 - altitude_m / 44330.0, 5.255)
+        p0 = pressure // pow(1.0 - altitude_m // 44330.0, 5.255)
         self._logger.debug('Sealevel pressure {0} Pa'.format(p0))
         return p0
