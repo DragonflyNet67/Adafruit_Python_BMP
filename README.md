@@ -1,5 +1,7 @@
-Adafruit Python BMP
+[DEPRECATED] Adafruit Python BMP
 ===================
+
+This library is now replaced by https://github.com/adafruit/Adafruit_CircuitPython_BMP280.
 
 Python library for accessing the BMP series pressure and temperature sensors like the BMP085/BMP180 on a Raspberry Pi or Beaglebone Black.
 
