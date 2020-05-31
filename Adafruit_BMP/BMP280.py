@@ -153,7 +153,7 @@ class BMP280(object):
         # Calculation taken straight from section 3.6 of the datasheet.
         pressure = float(self.read_pressure())
         #   altitude = 44330.0 * (1.0 - pow(pressure // sealevel_pa, (1.0 // 5.255)))   # nlsn DEL
-        altitude = 44330.0 * (1.0 - pow(pressure / sealevel_pa, (1.0 // 5.255)))        # nlsn INS
+        altitude = 44330.0 * (1.0 - pow(pressure // sealevel_pa, (1.0 / 5.255))) / 100  # nlsn INS
         self._logger.debug('Altitude {0} m'.format(altitude))
         return altitude
 
